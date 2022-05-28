@@ -30,7 +30,11 @@ public class ModuleClassLoader extends ClassLoader {
     private ClassLoader fallbackClassLoader = ClassLoader.getPlatformClassLoader();
 
     public ModuleClassLoader(final String name, final Configuration configuration, final List<ModuleLayer> parentLayers) {
-        super(name, null);
+        this(name, null, configuration, parentLayers);
+    }
+
+    public ModuleClassLoader(final String name, final ClassLoader parent, final Configuration configuration, final List<ModuleLayer> parentLayers) {
+        super(name, parent);
         this.configuration = configuration;
         this.resolvedRoots = configuration.modules().stream()
                 .map(ResolvedModule::reference)
