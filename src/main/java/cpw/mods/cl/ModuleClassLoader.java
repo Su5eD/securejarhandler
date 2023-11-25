@@ -215,11 +215,20 @@ public class ModuleClassLoader extends ClassLoader {
 
     @Override
     protected Class<?> findClass(final String moduleName, final String name) {
-        try {
-            return loadFromModule(moduleName, (reader, ref) -> this.readerToClass(reader, ref, name));
-        } catch (IOException e) {
-            return null;
+        if (moduleName == null) {
+            try {
+                return super.findClass(name);
+            } catch (ClassNotFoundException ignored) {
+
+            }
+        } else {
+            try {
+                return loadFromModule(moduleName, (reader, ref) -> this.readerToClass(reader, ref, name));
+            } catch (IOException ignored) {
+
+            }
         }
+        return null;
     }
 
     protected <T> T loadFromModule(final String moduleName, BiFunction<ModuleReader, ModuleReference, T> lookup) throws IOException {
